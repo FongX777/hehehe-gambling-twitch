@@ -2,11 +2,48 @@
   "allowHttpBackend": false,
   "backendCommand": "",
   "backendFolderName": "",
-  "certificateExceptions": [],
+  "certificateExceptions": [
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": true,
+      "value": "https://localhost:8080"
+    },
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": false,
+      "value": "wss://localhost:8080/sockjs-node/164/lo2syfqc/websocket"
+    },
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": false,
+      "value": "wss://localhost:8080/sockjs-node/203/ogb5kymb/websocket"
+    },
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": false,
+      "value": "wss://localhost:8080/sockjs-node/861/gl3msumg/websocket"
+    },
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": false,
+      "value": "wss://localhost:8080/sockjs-node/961/nioplcdw/websocket"
+    },
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": true,
+      "value": "wss://localhost:8080"
+    }
+  ],
   "extensionViews": [
     {
       "id": "1",
-      "label": "main",
+      "label": "broadcaster",
       "channelId": "152724880",
       "configurationAnchor": "video_overlay",
       "displayChannelName": "geniustanley",
@@ -21,6 +58,29 @@
       "mode": "viewer",
       "isPopout": false,
       "role": "Broadcaster",
+      "orientation": "Portrait",
+      "frameSize": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "id": "2",
+      "label": "viewer",
+      "channelId": "152724880",
+      "configurationAnchor": "video_overlay",
+      "displayChannelName": "geniustanley",
+      "type": "video_overlay",
+      "features": {
+        "isBitsEnabled": false,
+        "isChatEnabled": false,
+        "isSubscriptionStatusAvailable": false
+      },
+      "linked": false,
+      "linkedUserId": "",
+      "mode": "viewer",
+      "isPopout": false,
+      "role": "Logged-In Viewer",
       "orientation": "Portrait",
       "frameSize": {
         "width": 1280,
