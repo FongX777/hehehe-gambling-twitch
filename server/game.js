@@ -35,6 +35,18 @@ function getGame(streamerId) {
   return game;
 }
 
+function getBetOptionAmount(streamerId) {
+  const game = allGames[streamerId];
+  if (!game) {
+    return [];
+  }
+  const amounts = game.options.map(() => 0);
+  game.bets.forEach(b => {
+    amounts[b.optionNumber] += b.amount;
+  });
+  return amounts;
+}
+
 function getPayout(streamerId) {
   const { total, optionAmount } = calculateTotal(streamerId);
   const payout = optionAmount.map(a => total / a);
@@ -126,6 +138,7 @@ module.exports = {
   getTwitchWater,
   cashIn,
   getGame,
+  getBetOptionAmount,
   getPayout,
   createGame,
   gameStopBet,

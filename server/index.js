@@ -25,6 +25,12 @@ app.get('/game', (req, res) => {
   res.json(game);
 });
 
+app.get('/game/bet-amount', (req, res) => {
+  const { streamerId } = req.query;
+  const amounts = model.getBetOptionAmount(streamerId);
+  res.json(amounts);
+});
+
 app.get('/game/payout', (req, res) => {
   const { streamerId } = req.query;
   const payout = model.getPayout(streamerId);
