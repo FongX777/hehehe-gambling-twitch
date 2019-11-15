@@ -13,6 +13,7 @@ export default class Admin extends Component {
   constructor(props) {
     super(props);
     this.addOption = this.addOption.bind(this);
+    this.createGame = this.createGame.bind(this);
     this.removeOption = this.removeOption.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
@@ -21,6 +22,32 @@ export default class Admin extends Component {
       options: [],
       option: ""
     };
+  }
+
+  createGame() {
+      fetch(
+        `http://127.0.0.1:3000/game/create`,
+        {
+          mode: "no-cors",
+          method: "POST",
+          body: JSON.stringify(this.state),
+          headers: new Headers({
+            "Content-Type": "application/json"
+          })
+        }
+      ).then(r => {
+        window.Twitch.ext.rig.log(r.url);
+        return r.json();
+      }).catch(e => {
+        window.Twitch.ext.rig.log(e);
+      }).then(a => {
+        window.Twitch.ext.rig.log(a);
+      });
+        /*
+      ).then(r => r.json()).then(result => {
+        window.Twitch.ext.rig.log("fuck");
+      });
+      */
   }
 
   removeOption(i, e) {
@@ -32,6 +59,7 @@ export default class Admin extends Component {
   }
 
   addOption() {
+    window.Twitch.ext.rig.log("addOption");
     if (this.state.option === "") return;
     let options = this.state.options;
     options.push(this.state.option);
@@ -140,7 +168,11 @@ export default class Admin extends Component {
             </Row>
           </Form.Group>
 
-          <Button className="submitform" variant="outline-light">
+          <Button
+            className="submitform"
+            variant="outline-light"
+            onClick={this.createGame}
+          >
             開始發問
           </Button>
         </Form>
