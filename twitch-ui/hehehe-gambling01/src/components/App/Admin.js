@@ -51,7 +51,11 @@ export default class Admin extends Component {
   render() {
     return (
       <div style={{ margin: 30 }}>
-        <Form>
+        <Form
+          onSubmit={e => {
+            e.preventDefault();
+          }}
+        >
           <Form.Group>
             <Form.Label style={{ color: "white" }}>題目</Form.Label>
             <Form.Control
@@ -120,6 +124,7 @@ export default class Admin extends Component {
                   type="text"
                   placeholder="選項"
                   value={this.state.option}
+                  onKeyPress={this.addOption}
                   onChange={e => this.handleChange("option", e)}
                 />
               </Col>
@@ -135,7 +140,7 @@ export default class Admin extends Component {
             </Row>
           </Form.Group>
 
-          <Button className="submitform" variant="outline-light" type="submit">
+          <Button className="submitform" variant="outline-light">
             開始發問
           </Button>
         </Form>
