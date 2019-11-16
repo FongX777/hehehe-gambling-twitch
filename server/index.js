@@ -40,8 +40,8 @@ app.get('/game/payout', (req, res) => {
 });
 
 app.post('/game/create', (req, res) => {
-  const { streamerId, title, description, options } = req.body;
-  const game = model.createGame({ streamerId, title, description, options });
+  const { streamerId, title, description, countdown, options } = req.body;
+  const game = model.createGame({ streamerId, title, description, countdown, options });
   res.json(game);
 });
 
