@@ -12,13 +12,13 @@ function calculateTotal(streamerId) {
   });
   return {
     total,
-    optionAmount
+    optionAmount,
   };
 }
 
 function getTwitchWater(id) {
   const twitchWatcher = twitchWatchers[id];
-  return twitchWatcher;
+  return twitchWatcher || { token: 0 };
 }
 
 function cashIn(twitchWatcherId, amount) {
@@ -59,7 +59,7 @@ function createGame({
   title,
   description,
   countdown,
-  options = []
+  options = [],
 }) {
   const game = {
     id: gameCount,
@@ -69,7 +69,7 @@ function createGame({
     countdown,
     options: options.map(option => ({
       option,
-      total: 0
+      total: 0,
     })),
     createdAt: new Date(),
     bets: [],
@@ -94,21 +94,21 @@ function bet({ streamerId, twitchWatcherId, amount, optionNumber }) {
   if (!twitchWatcher || !twitchWatcher.token || twitchWatcher.token < amount) {
     return {
       error: true,
-      message: "not enough token"
+      message: 'not enough token',
     };
   }
 
   if (game.betStop) {
     return {
       error: true,
-      message: "bet stop"
+      message: 'bet stop',
     };
   }
 
   if (!game.options[optionNumber]) {
     return {
       error: true,
-      message: "no option"
+      message: 'no option',
     };
   }
 
@@ -116,7 +116,7 @@ function bet({ streamerId, twitchWatcherId, amount, optionNumber }) {
     streamerId,
     twitchWatcherId,
     amount,
-    optionNumber
+    optionNumber,
   };
 
   game.options[optionNumber].total += amount;
@@ -138,7 +138,7 @@ function endGame(streamerId, winnerOption) {
       if (!winToken[twitchWatcherId]) {
         winToken[twitchWatcherId] = 0;
       }
-      token = total / optionAmount[winnerOption] * amount;
+      token = (total / optionAmount[winnerOption]) * amount;
       winToken[twitchWatcherId] += token;
       twitchWatchers[twitchWatcherId].token += token;
     }
@@ -150,7 +150,7 @@ function getAllData() {
   return {
     gameCount,
     allGames,
-    twitchWatchers
+    twitchWatchers,
   };
 }
 
@@ -165,5 +165,5 @@ module.exports = {
   gameStopBet,
   bet,
   endGame,
-  getAllData
+  getAllData,
 };
