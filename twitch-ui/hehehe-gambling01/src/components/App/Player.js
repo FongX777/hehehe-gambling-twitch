@@ -45,8 +45,7 @@ export default class Player extends Component {
       });
   }
 
-  exchangeBits() {
-  }
+  exchangeBits() {}
 
   renderCountdown() {
     const createdAt = moment(this.state.createdAt);
@@ -152,9 +151,10 @@ export default class Player extends Component {
             <Button
               className="submitform"
               variant="outline-light"
+              style={{ marginTop: "1rem" }}
               onClick={this.exchangeBits}
             >
-              開始發問
+              儲存小奇點
             </Button>
           </Col>
         </Row>
