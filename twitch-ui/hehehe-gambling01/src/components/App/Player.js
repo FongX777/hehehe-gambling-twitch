@@ -1,14 +1,29 @@
 import React, { Component } from "react";
 import { Button, ListGroup, Badge, Row, Col } from "react-bootstrap";
+import moment from "moment";
 
 export default class Player extends Component {
   constructor(props) {
     super(props);
     this.fetchGame = this.fetchGame.bind(this);
+    this.renderCountdown = this.renderCountdown.bind(this);
     this.state = {
       title: "對面李星會死幾次呢？",
       countdown: "00 : 00",
-      options: ["5次以下", "5~10次", "11~15次"]
+      options: [
+        {
+          option: "5次以下",
+          total: 30
+        },
+        {
+          option: "5~10次",
+          total: 100
+        },
+        {
+          option: "11~15次",
+          total: 200
+        }
+      ]
     };
   }
 
@@ -20,9 +35,30 @@ export default class Player extends Component {
       .then(a => {
         this.setState({
           title: a.title,
-          options: a.options
+          countdown: a.countdown,
+          options: a.options,
+          createdAt: a.createdAt
         });
       });
+  }
+
+  renderCountdown() {
+    const createdAt = moment(this.state.createdAt);
+    const now = moment(new Date());
+
+    const diff = now.diff(createdAt, "seconds");
+
+    const countdown = this.state.countdown - diff;
+    if (countdown >= 0) {
+      const formatted = moment.utc(countdown*1000).format('mm : ss');
+      return (
+        <h3><b>{formatted}</b></h3>
+      );
+    } else {
+      return (
+        <h2><b>下注時間到</b></h2>
+      );
+    }
   }
 
   componentDidMount() {
@@ -34,12 +70,12 @@ export default class Player extends Component {
       <div style={{ margin: 30 }}>
         <Row>
           <Col>
-            <h3
+            <h2
               className="text-center"
-              style={{ fontWeight: "bole", color: "white" }}
+              style={{ marginBottom: 0, fontWeight: "bold", color: "white" }}
             >
               {this.state.title}
-            </h3>
+            </h2>
           </Col>
         </Row>
 
@@ -56,7 +92,7 @@ export default class Player extends Component {
               className="text-center"
               style={{ fontWeight: "bole", color: "white" }}
             >
-              倒數 {this.state.countdown}
+              {this.renderCountdown()}
             </h5>
           </Col>
         </Row>
@@ -78,13 +114,13 @@ export default class Player extends Component {
                         lineHeight: "36px"
                       }}
                     >
-                      {o}
+                      {o.option}
                       <Button
                         className={["fakebadge", "float-right"]}
                         variant="outline-light"
                         onClick={() => {}}
                       >
-                        $ 36,000
+                        $ {o.total}
                       </Button>
                     </div>
                   </ListGroup.Item>
