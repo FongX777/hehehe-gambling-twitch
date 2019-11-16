@@ -1,9 +1,9 @@
-import React from "react";
-import Authentication from "../../util/Authentication/Authentication";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
-import Admin from "./Admin";
-import Player from "./Player";
+import React from 'react';
+import Authentication from '../../util/Authentication/Authentication';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+import Admin from './Admin';
+import Player from './Player';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -14,13 +14,13 @@ export default class App extends React.Component {
     this.twitch = window.Twitch ? window.Twitch.ext : null;
     this.state = {
       finishedLoading: false,
-      theme: "light",
-      isVisible: true
+      theme: 'light',
+      isVisible: true,
     };
   }
 
   contextUpdate(context, delta) {
-    if (delta.includes("theme")) {
+    if (delta.includes('theme')) {
       this.setState(() => {
         return { theme: context.theme };
       });
@@ -30,7 +30,7 @@ export default class App extends React.Component {
   visibilityChanged(isVisible) {
     this.setState(() => {
       return {
-        isVisible
+        isVisible,
       };
     });
   }
@@ -49,9 +49,9 @@ export default class App extends React.Component {
         }
       });
 
-      this.twitch.listen("broadcast", (target, contentType, body) => {
+      this.twitch.listen('broadcast', (target, contentType, body) => {
         this.twitch.rig.log(
-          `New PubSub message!\n${target}\n${contentType}\n${body}`
+          `New PubSub message!\n${target}\n${contentType}\n${body}`,
         );
         // now that you've got a listener, do something with the result...
 
@@ -70,8 +70,8 @@ export default class App extends React.Component {
 
   componentWillUnmount() {
     if (this.twitch) {
-      this.twitch.unlisten("broadcast", () =>
-        console.log("successfully unlistened")
+      this.twitch.unlisten('broadcast', () =>
+        console.log('successfully unlistened'),
       );
     }
   }
@@ -80,10 +80,12 @@ export default class App extends React.Component {
     if (this.state.finishedLoading && this.state.isVisible) {
       return (
         <div className="App">
-          {this.Authentication.isModerator() ? 
-              <Admin 
-                authentication={this.Authentication}
-              /> : <Player />}
+          {this.Authentication.isModerator() ? (
+            // <Admin authentication={this.Authentication} />
+            <Player authentication={this.Authentication} />
+          ) : (
+            <Player authentication={this.Authentication} />
+          )}
           {/*
           <div>
             <p>My token is: {this.Authentication.state.token}</p>
