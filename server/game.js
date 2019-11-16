@@ -53,13 +53,16 @@ function getPayout(streamerId) {
   return payout;
 }
 
-function createGame({ streamerId, title, description, options }) {
+function createGame({ streamerId, title, description, options = [] }) {
   const game = {
     id: gameCount,
     streamerId,
     title,
     description,
-    options,
+    options: options.map(op => ({
+      ...op,
+      total: 0,
+    })),
     createdAt: new Date(),
     bets: [],
     betStop: false,
@@ -93,6 +96,13 @@ function bet({ streamerId, twitchWatcherId, amount, optionNumber }) {
     };
   }
 
+  if (!game.options[optionNumber]) {
+    return {
+      error: true,
+      message: 'no option',
+    };
+  }
+
   const bet = {
     streamerId,
     twitchWatcherId,
@@ -100,6 +110,7 @@ function bet({ streamerId, twitchWatcherId, amount, optionNumber }) {
     optionNumber,
   };
 
+  game.options[optionNumber].total += amount;
   twitchWatcher.token -= amount;
   game.bets.push(bet);
 
