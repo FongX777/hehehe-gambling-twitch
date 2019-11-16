@@ -18,6 +18,7 @@ export default class Admin extends Component {
     this.removeOption = this.removeOption.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.submitAnnounce = this.submitAnnounce.bind(this);
+    this.resetGame = this.resetGame.bind(this);
     this.Authentication = this.props.authentication;
     this.state = {
       streamerId: 12345 /*this.Authentication.getUserId(),*/,
@@ -25,7 +26,8 @@ export default class Admin extends Component {
       countdown: "30",
       options: [],
       option: "",
-      announce: false
+      announce: false,
+      winner: null
     };
   }
 
@@ -44,6 +46,13 @@ export default class Admin extends Component {
         });
         // window.Twitch.ext.rig.log(a);
       });
+  }
+
+  resetGame() {
+    this.setState({
+      winner: null,
+      announce: false
+    });
   }
 
   removeOption(i, e) {
@@ -74,8 +83,13 @@ export default class Admin extends Component {
   }
 
   submitAnnounce(e, i) {
+    if (this.state.winner != null) return;
     // window.Twitch.ext.rig.log("submitAnnounce");
     e.preventDefault();
+    this.setState({
+      winner: i
+    });
+
     fetch(`http://127.0.0.1:3000/game/end`, {
       method: "POST",
       body: JSON.stringify({
@@ -88,9 +102,11 @@ export default class Admin extends Component {
     })
       .then(r => r.json())
       .then(a => {
+        /*
         this.setState({
           announce: false
         });
+        */
         // window.Twitch.ext.rig.log(a);
       });
   }
@@ -130,7 +146,9 @@ export default class Admin extends Component {
               className="text-center"
               style={{ fontWeight: "bold", color: "white" }}
             >
-              請選擇答案
+              {this.state.winner == null
+                ? "請選擇答案"
+                : `您公佈答案為 ${this.state.options[this.state.winner]}`}
             </h6>
           </Col>
         </Row>
@@ -141,7 +159,10 @@ export default class Admin extends Component {
               {this.state.options.map((o, i) => {
                 return (
                   <ListGroup.Item
-                    className="submitAnnounce"
+                    className={[
+                      "submitAnnounce",
+                      i == this.state.winner ? "winnerActive" : ""
+                    ]}
                     style={{
                       borderColor: "white",
                       color: "white"
@@ -159,6 +180,19 @@ export default class Admin extends Component {
                 );
               })}
             </ListGroup>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <Button
+              className="submitform"
+              style={{ marginTop: "1rem" }}
+              variant="outline-light"
+              onClick={this.resetGame}
+            >
+              重新發問
+            </Button>
           </Col>
         </Row>
       </div>
@@ -209,11 +243,11 @@ export default class Admin extends Component {
               <option value="1200">20分鐘</option>
             </Form.Control>
           </Form.Group>
-          <Form.Group controlId="asdf" style={{ marginBottom: 0 }}>
+          <Form.Group style={{ marginBottom: 0 }}>
             <Form.Label style={{ color: "white" }}>選項</Form.Label>
           </Form.Group>
 
-          <Form.Group controlId="asdf" style={{ marginBottom: 0 }}>
+          <Form.Group style={{ marginBottom: 0 }}>
             {this.state.options.map((o, i) => (
               <Row style={{ marginBottom: 5 }}>
                 <Col sm={10}>

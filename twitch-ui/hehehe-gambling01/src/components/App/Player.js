@@ -7,9 +7,11 @@ export default class Player extends Component {
     super(props);
     this.fetchGame = this.fetchGame.bind(this);
     this.renderCountdown = this.renderCountdown.bind(this);
+    this.exchangeBits = this.exchangeBits.bind(this);
     this.state = {
       title: "對面李星會死幾次呢？",
       countdown: "00 : 00",
+      winner: null,
       options: [
         {
           option: "5次以下",
@@ -37,9 +39,13 @@ export default class Player extends Component {
           title: a.title,
           countdown: a.countdown,
           options: a.options,
-          createdAt: a.createdAt
+          createdAt: a.createdAt,
+          winner: a.winner
         });
       });
+  }
+
+  exchangeBits() {
   }
 
   renderCountdown() {
@@ -50,13 +56,17 @@ export default class Player extends Component {
 
     const countdown = this.state.countdown - diff;
     if (countdown >= 0) {
-      const formatted = moment.utc(countdown*1000).format('mm : ss');
+      const formatted = moment.utc(countdown * 1000).format("mm : ss");
       return (
-        <h3><b>{formatted}</b></h3>
+        <h3>
+          <b>{formatted}</b>
+        </h3>
       );
     } else {
       return (
-        <h2><b>下注時間到</b></h2>
+        <h2>
+          <b>下注時間到</b>
+        </h2>
       );
     }
   }
@@ -92,7 +102,13 @@ export default class Player extends Component {
               className="text-center"
               style={{ fontWeight: "bold", color: "white" }}
             >
-              {this.renderCountdown()}
+              {this.state.winner == null ? (
+                this.renderCountdown()
+              ) : (
+                <h3>
+                  <b>答案為 {this.state.options[this.state.winner].option}</b>
+                </h3>
+              )}
             </h5>
           </Col>
         </Row>
@@ -100,14 +116,16 @@ export default class Player extends Component {
         <Row>
           <Col>
             <ListGroup style={{ background: "transparent" }}>
-              {this.state.options.map(o => {
+              {this.state.options.map((o, i) => {
                 return (
                   <ListGroup.Item
                     style={{
-                      background: "transparent",
                       borderColor: "white",
                       color: "white"
                     }}
+                    className={
+                      i == this.state.winner ? "winnerActive" : "transparentBg"
+                    }
                   >
                     <div
                       style={{
@@ -127,6 +145,17 @@ export default class Player extends Component {
                 );
               })}
             </ListGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button
+              className="submitform"
+              variant="outline-light"
+              onClick={this.exchangeBits}
+            >
+              開始發問
+            </Button>
           </Col>
         </Row>
       </div>

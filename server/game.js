@@ -73,6 +73,7 @@ function createGame({
     })),
     createdAt: new Date(),
     bets: [],
+    winner: null,
     betStop: false
   };
   gameCount++;
@@ -129,6 +130,7 @@ function endGame(streamerId, winnerOption) {
   const game = allGames[streamerId];
   const { total, optionAmount } = calculateTotal(streamerId);
   const winToken = {};
+  game.winner = winnerOption;
   game.bets.forEach(b => {
     const { twitchWatcherId, amount, optionNumber } = b;
 
