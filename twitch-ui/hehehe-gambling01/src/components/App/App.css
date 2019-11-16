@@ -43,3 +43,11 @@ body {
   background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
 }
+
+.winnerActive {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.transparentBg {
+  background: transparent;
+}
