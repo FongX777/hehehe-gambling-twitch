@@ -90,7 +90,7 @@ export default class Player extends Component {
           <Col>
             <h5
               className="text-center"
-              style={{ fontWeight: "bole", color: "white" }}
+              style={{ fontWeight: "bold", color: "white" }}
             >
               {this.renderCountdown()}
             </h5>

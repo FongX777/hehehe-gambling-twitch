@@ -1,9 +1,12 @@
+body {
+  background: transparent;
+}
 .App {
     font-family: Arial, Helvetica, sans-serif;
     background: linear-gradient(45deg, #FF5F6D, #FFC371);
     position: absolute;
     right: 0;
-    top: 5%;
+    top: 15%;
     width: 40%;
     border-radius: 30px;
 }
@@ -30,4 +33,13 @@
     cursor: default;
     background: transparent;
     color: white;
+}
+
+.submitAnnounce {
+  background: transparent;
+}
+
+.submitAnnounce:hover {
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
 }

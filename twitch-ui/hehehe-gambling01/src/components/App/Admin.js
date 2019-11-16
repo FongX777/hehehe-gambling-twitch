@@ -3,6 +3,7 @@ import {
   ButtonToolbar,
   Button,
   Container,
+  ListGroup,
   Row,
   Col,
   Form
@@ -16,13 +17,15 @@ export default class Admin extends Component {
     this.createGame = this.createGame.bind(this);
     this.removeOption = this.removeOption.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.submitAnnounce = this.submitAnnounce.bind(this);
     this.Authentication = this.props.authentication;
     this.state = {
-      streamerId: 12345, /*this.Authentication.getUserId(),*/
+      streamerId: 12345 /*this.Authentication.getUserId(),*/,
       title: "",
       countdown: "30",
       options: [],
-      option: ""
+      option: "",
+      announce: false
     };
   }
 
@@ -36,7 +39,10 @@ export default class Admin extends Component {
     })
       .then(r => r.json())
       .then(a => {
-        window.Twitch.ext.rig.log(a);
+        this.setState({
+          announce: true
+        });
+        // window.Twitch.ext.rig.log(a);
       });
   }
 
@@ -49,7 +55,7 @@ export default class Admin extends Component {
   }
 
   addOption() {
-    window.Twitch.ext.rig.log(this.state.streamerId);
+    // window.Twitch.ext.rig.log(this.state.streamerId);
     if (this.state.option === "") return;
     let options = this.state.options;
     options.push(this.state.option);
@@ -60,14 +66,106 @@ export default class Admin extends Component {
   }
 
   handleChange(n, e) {
-    window.Twitch.ext.rig.log(e.target.value);
+    // window.Twitch.ext.rig.log(e.target.value);
     e.preventDefault();
     this.setState({
       [n]: e.target.value
     });
   }
 
+  submitAnnounce(e, i) {
+    // window.Twitch.ext.rig.log("submitAnnounce");
+    e.preventDefault();
+    fetch(`http://127.0.0.1:3000/game/end`, {
+      method: "POST",
+      body: JSON.stringify({
+        streamerId: this.state.streamerId,
+        winnerOption: i
+      }),
+      headers: new Headers({
+        "Content-Type": "application/json"
+      })
+    })
+      .then(r => r.json())
+      .then(a => {
+        this.setState({
+          announce: false
+        });
+        // window.Twitch.ext.rig.log(a);
+      });
+  }
+
   render() {
+    if (this.state.announce) {
+      return this.renderAnnounce();
+    } else {
+      return this.renderQuestion();
+    }
+  }
+
+  renderAnnounce() {
+    return (
+      <div style={{ margin: 30 }}>
+        <Row>
+          <Col>
+            <h2
+              className="text-center"
+              style={{ marginBottom: 0, fontWeight: "bold", color: "white" }}
+            >
+              {this.state.title}
+            </h2>
+          </Col>
+        </Row>
+
+        <hr
+          style={{
+            border: 0,
+            borderTop: "1px solid rgba(255, 255, 255)"
+          }}
+        />
+
+        <Row>
+          <Col>
+            <h6
+              className="text-center"
+              style={{ fontWeight: "bold", color: "white" }}
+            >
+              請選擇答案
+            </h6>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <ListGroup style={{ background: "transparent" }}>
+              {this.state.options.map((o, i) => {
+                return (
+                  <ListGroup.Item
+                    className="submitAnnounce"
+                    style={{
+                      borderColor: "white",
+                      color: "white"
+                    }}
+                    onClick={e => this.submitAnnounce(e, i)}
+                  >
+                    <div
+                      style={{
+                        lineHeight: "36px"
+                      }}
+                    >
+                      {o}
+                    </div>
+                  </ListGroup.Item>
+                );
+              })}
+            </ListGroup>
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
+  renderQuestion() {
     return (
       <div style={{ margin: 30 }}>
         <Form
@@ -120,7 +218,7 @@ export default class Admin extends Component {
               <Row style={{ marginBottom: 5 }}>
                 <Col sm={10}>
                   <Form.Label style={{ color: "white", fontWeight: "bold" }}>
-                    選項 {i+1}. {o}
+                    選項 {i + 1}. {o}
                   </Form.Label>
                 </Col>
                 <Col sm={2}>
