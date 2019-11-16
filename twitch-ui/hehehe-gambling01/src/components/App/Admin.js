@@ -20,7 +20,7 @@ export default class Admin extends Component {
     this.state = {
       streamerId: 12345, /*this.Authentication.getUserId(),*/
       title: "",
-      countdown: "1分鐘",
+      countdown: "30",
       options: [],
       option: ""
     };
@@ -60,6 +60,7 @@ export default class Admin extends Component {
   }
 
   handleChange(n, e) {
+    window.Twitch.ext.rig.log(e.target.value);
     e.preventDefault();
     this.setState({
       [n]: e.target.value
@@ -102,11 +103,12 @@ export default class Admin extends Component {
               value={this.state.countdown}
               onChange={e => this.handleChange("countdown", e)}
             >
-              <option value="1">1分鐘</option>
-              <option value="3">3分鐘</option>
-              <option value="5">5分鐘</option>
-              <option value="10">10分鐘</option>
-              <option value="20">20分鐘</option>
+              <option value="30">30秒</option>
+              <option value="60">1分鐘</option>
+              <option value="180">3分鐘</option>
+              <option value="300">5分鐘</option>
+              <option value="600">10分鐘</option>
+              <option value="1200">20分鐘</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="asdf" style={{ marginBottom: 0 }}>
