@@ -25,3 +25,9 @@
     border:1px solid white;
     box-shadow: 0 0 20px white;
 }
+
+.fakebadge:hover {
+    cursor: default;
+    background: transparent;
+    color: white;
+}

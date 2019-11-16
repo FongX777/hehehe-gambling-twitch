@@ -1,7 +1,7 @@
 {
   "allowHttpBackend": false,
-  "backendCommand": "",
-  "backendFolderName": "",
+  "backendCommand": "node index.js",
+  "backendFolderName": "/home/stanley/hehehe-gambling-twitch/server",
   "certificateExceptions": [
     {
       "isAllowed": true,

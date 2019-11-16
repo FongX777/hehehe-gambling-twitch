@@ -80,7 +80,10 @@ export default class App extends React.Component {
     if (this.state.finishedLoading && this.state.isVisible) {
       return (
         <div className="App">
-          {this.Authentication.isModerator() ? <Admin /> : <Player />}
+          {this.Authentication.isModerator() ? 
+              <Admin 
+                authentication={this.Authentication}
+              /> : <Player />}
           {/*
           <div>
             <p>My token is: {this.Authentication.state.token}</p>

@@ -16,7 +16,9 @@ export default class Admin extends Component {
     this.createGame = this.createGame.bind(this);
     this.removeOption = this.removeOption.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.Authentication = this.props.authentication;
     this.state = {
+      streamerId: 12345, /*this.Authentication.getUserId(),*/
       title: "",
       countdown: "1分鐘",
       options: [],
@@ -25,29 +27,17 @@ export default class Admin extends Component {
   }
 
   createGame() {
-      fetch(
-        `http://127.0.0.1:3000/game/create`,
-        {
-          mode: "no-cors",
-          method: "POST",
-          body: JSON.stringify(this.state),
-          headers: new Headers({
-            "Content-Type": "application/json"
-          })
-        }
-      ).then(r => {
-        window.Twitch.ext.rig.log(r.url);
-        return r.json();
-      }).catch(e => {
-        window.Twitch.ext.rig.log(e);
-      }).then(a => {
+    fetch(`http://127.0.0.1:3000/game/create`, {
+      method: "POST",
+      body: JSON.stringify(this.state),
+      headers: new Headers({
+        "Content-Type": "application/json"
+      })
+    })
+      .then(r => r.json())
+      .then(a => {
         window.Twitch.ext.rig.log(a);
       });
-        /*
-      ).then(r => r.json()).then(result => {
-        window.Twitch.ext.rig.log("fuck");
-      });
-      */
   }
 
   removeOption(i, e) {
@@ -59,7 +49,7 @@ export default class Admin extends Component {
   }
 
   addOption() {
-    window.Twitch.ext.rig.log("addOption");
+    window.Twitch.ext.rig.log(this.state.streamerId);
     if (this.state.option === "") return;
     let options = this.state.options;
     options.push(this.state.option);
@@ -128,7 +118,7 @@ export default class Admin extends Component {
               <Row style={{ marginBottom: 5 }}>
                 <Col sm={10}>
                   <Form.Label style={{ color: "white", fontWeight: "bold" }}>
-                    {i}. {o}
+                    選項 {i+1}. {o}
                   </Form.Label>
                 </Col>
                 <Col sm={2}>
