@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Button, ListGroup, Badge, Row, Col } from "react-bootstrap";
-import moment from "moment";
+import React, { Component } from 'react';
+import { Button, ListGroup, Badge, Row, Col } from 'react-bootstrap';
+import moment from 'moment';
 
 export default class Player extends Component {
   constructor(props) {
@@ -9,29 +9,44 @@ export default class Player extends Component {
     this.renderCountdown = this.renderCountdown.bind(this);
     this.exchangeBits = this.exchangeBits.bind(this);
     this.state = {
-      title: "對面李星會死幾次呢？",
-      countdown: "00 : 00",
+      title: '對面李星會死幾次呢？',
+      countdown: '00 : 00',
       winner: null,
       options: [
         {
-          option: "5次以下",
-          total: 30
+          option: '5次以下',
+          total: 30,
         },
         {
-          option: "5~10次",
-          total: 100
+          option: '5~10次',
+          total: 100,
         },
         {
-          option: "11~15次",
-          total: 200
-        }
-      ]
+          option: '11~15次',
+          total: 200,
+        },
+      ],
     };
+    Twitch.ext.bits.onTransactionComplete(function(transaction) {
+      const userId = props.authentication.getUserId();
+      const amount = transaction.product.cost.amount;
+      console.log('onTransactionComplete', userId, amount);
+      fetch(`http://127.0.0.1:3000/cash-in`, {
+        method: 'POST',
+        body: JSON.stringify({
+          twitchWatcherId: userId,
+          amount,
+        }),
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+      });
+    });
   }
 
   fetchGame() {
     fetch(`http://localhost:3000/game?streamerId=12345`, {
-      method: "GET"
+      method: 'GET',
     })
       .then(r => r.json())
       .then(a => {
@@ -40,22 +55,27 @@ export default class Player extends Component {
           countdown: a.countdown,
           options: a.options,
           createdAt: a.createdAt,
-          winner: a.winner
+          winner: a.winner,
         });
       });
   }
 
-  exchangeBits() {}
+  exchangeBits() {
+    Twitch.ext.bits.getProducts().then(function(products) {
+      console.log(products[0]);
+      Twitch.ext.bits.useBits(products[0].sku);
+    });
+  }
 
   renderCountdown() {
     const createdAt = moment(this.state.createdAt);
     const now = moment(new Date());
 
-    const diff = now.diff(createdAt, "seconds");
+    const diff = now.diff(createdAt, 'seconds');
 
     const countdown = this.state.countdown - diff;
     if (countdown >= 0) {
-      const formatted = moment.utc(countdown * 1000).format("mm : ss");
+      const formatted = moment.utc(countdown * 1000).format('mm : ss');
       return (
         <h3>
           <b>{formatted}</b>
@@ -81,7 +101,7 @@ export default class Player extends Component {
           <Col>
             <h2
               className="text-center"
-              style={{ marginBottom: 0, fontWeight: "bold", color: "white" }}
+              style={{ marginBottom: 0, fontWeight: 'bold', color: 'white' }}
             >
               {this.state.title}
             </h2>
@@ -91,7 +111,7 @@ export default class Player extends Component {
         <hr
           style={{
             border: 0,
-            borderTop: "1px solid rgba(255, 255, 255)"
+            borderTop: '1px solid rgba(255, 255, 255)',
           }}
         />
 
@@ -99,7 +119,7 @@ export default class Player extends Component {
           <Col>
             <h5
               className="text-center"
-              style={{ fontWeight: "bold", color: "white" }}
+              style={{ fontWeight: 'bold', color: 'white' }}
             >
               {this.state.winner == null ? (
                 this.renderCountdown()
@@ -114,26 +134,26 @@ export default class Player extends Component {
 
         <Row>
           <Col>
-            <ListGroup style={{ background: "transparent" }}>
+            <ListGroup style={{ background: 'transparent' }}>
               {this.state.options.map((o, i) => {
                 return (
                   <ListGroup.Item
                     style={{
-                      borderColor: "white",
-                      color: "white"
+                      borderColor: 'white',
+                      color: 'white',
                     }}
                     className={
-                      i == this.state.winner ? "winnerActive" : "transparentBg"
+                      i == this.state.winner ? 'winnerActive' : 'transparentBg'
                     }
                   >
                     <div
                       style={{
-                        lineHeight: "36px"
+                        lineHeight: '36px',
                       }}
                     >
                       {o.option}
                       <Button
-                        className={["fakebadge", "float-right"]}
+                        className={['fakebadge', 'float-right']}
                         variant="outline-light"
                         onClick={() => {}}
                       >
@@ -151,7 +171,7 @@ export default class Player extends Component {
             <Button
               className="submitform"
               variant="outline-light"
-              style={{ marginTop: "1rem" }}
+              style={{ marginTop: '1rem' }}
               onClick={this.exchangeBits}
             >
               儲存小奇點
