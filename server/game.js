@@ -17,11 +17,12 @@ function calculateTotal(streamerId) {
 }
 
 function getTwitchWater(id) {
-  const twitchWatcher = twitchWatchers[twitchWatcherId];
+  const twitchWatcher = twitchWatchers[id];
   return twitchWatcher;
 }
 
 function cashIn(twitchWatcherId, amount) {
+  console.log('log: ', twitchWatcherId, amount);
   if (!twitchWatchers[twitchWatcherId]) {
     twitchWatchers[twitchWatcherId] = { token: 0 };
   }
