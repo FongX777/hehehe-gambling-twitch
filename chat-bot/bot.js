@@ -61,6 +61,7 @@ async function getToken(id) {
     `http://localhost:3000/twitch-watcher?twitchWatcherId=${id}`
   );
   const json = await res.json();
+  console.log('getToken: ', json);
   return json.token;
 }
 
@@ -77,7 +78,7 @@ async function parseGetToken(target, context, commandName) {
   if (commandName.match(/^!token$/)) {
     // get token
     const token = await getToken(context["user-id"]);
-    if (token) {
+    if (!isNaN(token)) {
       client.say(target, `你有 ${token} 元`);
     }
   }
