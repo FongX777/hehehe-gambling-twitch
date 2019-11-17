@@ -159,6 +159,12 @@ function getAllData() {
   };
 }
 
+function reset() {
+  gameCount = 0;
+  allGames = {};
+  twitchWatchers = {};
+}
+
 module.exports = {
   calculateTotal,
   getTwitchWater,
@@ -171,4 +177,5 @@ module.exports = {
   bet,
   endGame,
   getAllData,
+  reset,
 };
