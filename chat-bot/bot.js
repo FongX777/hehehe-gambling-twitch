@@ -1,8 +1,11 @@
 const tmi = require("tmi.js");
 const fetch = require("node-fetch");
 
-const BOT_USERNAME = "geniustanley";
-const OAUTH_TOKEN = "oauth:q8ftfv7trz06cwj3s3uinm2jkf8omp";
+const BOT_USERNAME = "coolsino";
+const OAUTH_TOKEN =
+  // "oauth:f4v0j7pmqshcx0wcaq2qlmgx1k3nli"  || //Tx
+  // "oauth:q8ftfv7trz06cwj3s3uinm2jkf8omp"; || // geniustanley
+  "oauth:fc5u99iuoh6zx4lkaheab5rt8fq8f8";
 const CHANNEL_NAME = "geniustanley";
 // Define configuration options
 const opts = {
@@ -10,8 +13,9 @@ const opts = {
     username: BOT_USERNAME,
     password: OAUTH_TOKEN
   },
-  channels: [CHANNEL_NAME, "txdragongaming"],
+  channels: [CHANNEL_NAME, "txdragongaming", "geniusgordon"],
   options: {
+    clientId: "qqlkimct46qhykax6n3p8iur7ddnns",
     debug: true
   }
 };
@@ -70,7 +74,8 @@ async function parseCashIn(target, context, commandName) {
   if (commandName.startsWith("!cashIn")) {
     const token = await cashIn(context["user-id"], 100);
     if (token) {
-      client.say(target, `你存了 100 元, 總共 ${token} 元`);
+      console.log("target: ", target);
+      client.say(target, `${context.username} 存了 100 元, 總共 ${token} 元`);
     }
   }
 }
@@ -80,7 +85,7 @@ async function parseGetToken(target, context, commandName) {
     // get token
     const token = await getToken(context["user-id"]);
     if (!isNaN(token)) {
-      client.say(target, `你有 ${token} 元`);
+      client.say(target, `${context.username} 有 ${token} 元`);
     }
   }
 }
@@ -116,10 +121,16 @@ async function parseBet(target, context, commandName) {
 
       console.log(`* Executed "bet ${option} ${money} command`);
       const result = await bet(12345, context["user-id"], money, option - 1);
+      if (result.message === "not enough token") {
+        client.say(target, `${context.username} 哭哭沒錢ㄛ`);
+        return;
+      }
       if (!isNaN(result.optionNumber) && !isNaN(result.amount)) {
         client.say(
           target,
-          `你已下注 ${result.optionNumber + 1} 號選項 ${result.amount} 元`
+          `${context.username} 已下注 ${result.optionNumber + 1} 號選項 ${
+            result.amount
+          } 元`
         );
       }
     } else {
