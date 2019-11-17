@@ -18,6 +18,7 @@ export default class Admin extends Component {
     this.removeOption = this.removeOption.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.submitAnnounce = this.submitAnnounce.bind(this);
+    this.fetchGame = this.fetchGame.bind(this);
     this.resetGame = this.resetGame.bind(this);
     this.Authentication = this.props.authentication;
     this.state = {
@@ -29,6 +30,29 @@ export default class Admin extends Component {
       announce: false,
       winner: null
     };
+  }
+
+  fetchGame() {
+    fetch(`http://localhost:3000/game?streamerId=12345`, {
+      method: "GET"
+    })
+      .then(r => r.json())
+      .then(a => {
+
+        const options = a.options.map(o => o.option);
+        this.setState({
+          title: a.title,
+          countdown: a.countdown,
+          options: options,
+          createdAt: a.createdAt,
+          winner: a.winner,
+          announce: a.options.length > 0 ? true : false
+        });
+      });
+  }
+
+  componentDidMount() {
+    this.fetchGame();
   }
 
   createGame() {
