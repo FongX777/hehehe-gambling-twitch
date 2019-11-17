@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hehehehackathon-chatbot-deploy
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels: # labels to select/identify the deployment
+        app: hehehehackathon-chatbot-deploy
+    spec: # pod spec
+      containers:
+        - name: hehehehackathon-chatbot
+          image: 965233513114.dkr.ecr.us-west-2.amazonaws.com/hehehehackathon-chatbot:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: SERVER_URL
+              value: http://a46ec5fdc08a011eaa85a0e89fabf67b-235556262.us-west-2.elb.amazonaws.com:3000
+  selector:
+    matchLabels:
+      app: hehehehackathon-chatbot-deploy
