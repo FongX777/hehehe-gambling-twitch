@@ -65,8 +65,8 @@
       }
     },
     {
-      "id": "2",
-      "label": "viewer",
+      "id": "3",
+      "label": "",
       "channelId": "152724880",
       "configurationAnchor": "video_overlay",
       "displayChannelName": "geniustanley",
@@ -76,8 +76,8 @@
         "isChatEnabled": false,
         "isSubscriptionStatusAvailable": false
       },
-      "linked": false,
-      "linkedUserId": "",
+      "linked": true,
+      "linkedUserId": "265737932",
       "mode": "viewer",
       "isPopout": false,
       "role": "Logged-In Viewer",
