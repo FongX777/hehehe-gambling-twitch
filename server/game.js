@@ -70,11 +70,13 @@ function createGame({
     options: options.map(option => ({
       option,
       total: 0,
+      people: {},
     })),
     createdAt: new Date(),
     bets: [],
     winner: null,
-    betStop: false
+    betStop: false,
+    isEnd: false,
   };
   gameCount++;
   allGames[streamerId] = game;
@@ -119,6 +121,7 @@ function bet({ streamerId, twitchWatcherId, amount, optionNumber }) {
     optionNumber,
   };
 
+  game.options[optionNumber].people[twitchWatcherId] = true;
   game.options[optionNumber].total += amount;
   twitchWatcher.token -= amount;
   game.bets.push(bet);
@@ -129,21 +132,23 @@ function bet({ streamerId, twitchWatcherId, amount, optionNumber }) {
 function endGame(streamerId, winnerOption) {
   const game = allGames[streamerId];
   const { total, optionAmount } = calculateTotal(streamerId);
-  const winToken = {};
+  const winners = {};
   game.winner = winnerOption;
   game.bets.forEach(b => {
     const { twitchWatcherId, amount, optionNumber } = b;
 
     if (optionNumber === winnerOption) {
-      if (!winToken[twitchWatcherId]) {
-        winToken[twitchWatcherId] = 0;
+      if (!winners[twitchWatcherId]) {
+        winners[twitchWatcherId] = 0;
       }
       token = (total / optionAmount[winnerOption]) * amount;
-      winToken[twitchWatcherId] += token;
+      winners[twitchWatcherId] += token;
       twitchWatchers[twitchWatcherId].token += token;
     }
   });
-  return winToken;
+  game.isEnd = true;
+  game.winners = winners;
+  return winners;
 }
 
 function getAllData() {
