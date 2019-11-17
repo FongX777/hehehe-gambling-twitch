@@ -100,7 +100,7 @@ function bet({ streamerId, twitchWatcherId, amount, optionNumber }) {
       message: "no game"
     };
   }
-  
+
   if (!twitchWatcher || !twitchWatcher.token || twitchWatcher.token < amount) {
     return {
       error: true,
@@ -169,6 +169,12 @@ function getAllData() {
   };
 }
 
+function reset() {
+  gameCount = 0;
+  allGames = {};
+  twitchWatchers = {};
+}
+
 module.exports = {
   calculateTotal,
   getTwitchWater,
@@ -180,5 +186,6 @@ module.exports = {
   gameStopBet,
   bet,
   endGame,
-  getAllData
+  getAllData,
+  reset,
 };
