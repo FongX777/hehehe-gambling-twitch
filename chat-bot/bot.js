@@ -40,6 +40,7 @@ async function bet(streamerId, twitchWatcherId, amount, optionNumber) {
   });
   const json = await res.json();
   console.log("bet result: ", json);
+  return json;
 }
 
 async function cashIn(twitchWatcherId, amount) {
@@ -61,7 +62,7 @@ async function getToken(id) {
     `http://localhost:3000/twitch-watcher?twitchWatcherId=${id}`
   );
   const json = await res.json();
-  console.log('getToken: ', json);
+  console.log("getToken: ", json);
   return json.token;
 }
 
@@ -84,7 +85,7 @@ async function parseGetToken(target, context, commandName) {
   }
 }
 
-function parseBet(target, context, commandName) {
+async function parseBet(target, context, commandName) {
   if (commandName.startsWith("!bet")) {
     const parseStringArray = commandName.split(" ");
     console.log(`* Parse: `, parseStringArray);
@@ -114,7 +115,13 @@ function parseBet(target, context, commandName) {
       console.log(`* Money: ${money}`);
 
       console.log(`* Executed "bet ${option} ${money} command`);
-      bet(12345, context["user-id"], money, option - 1);
+      const result = await bet(12345, context["user-id"], money, option - 1);
+      if (!isNaN(result.optionNumber) && !isNaN(result.amount)) {
+        client.say(
+          target,
+          `你已下注 ${result.optionNumber + 1} 號選項 ${result.amount} 元`
+        );
+      }
     } else {
       console.log(`* Unknown command ${commandName}`);
     }
