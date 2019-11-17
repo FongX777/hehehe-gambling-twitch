@@ -1,6 +1,11 @@
 const tmi = require("tmi.js");
 const fetch = require("node-fetch");
 
+const SERVER_URL =
+  process.env.SERVER_URL ||
+  "http://a46ec5fdc08a011eaa85a0e89fabf67b-235556262.us-west-2.elb.amazonaws.com:3000" ||
+  "http://localhost:3000";
+
 const BOT_USERNAME = "geniustanley";
 const OAUTH_TOKEN = "oauth:q8ftfv7trz06cwj3s3uinm2jkf8omp";
 const CHANNEL_NAME = "geniustanley";
@@ -33,7 +38,7 @@ async function bet(streamerId, twitchWatcherId, amount, optionNumber) {
     amount,
     optionNumber
   };
-  const res = await fetch("http://localhost:3000/bet", {
+  const res = await fetch(`${SERVER_URL}/bet`, {
     method: "post",
     body: JSON.stringify(body),
     headers: { "Content-Type": "application/json" }
@@ -47,7 +52,8 @@ async function cashIn(twitchWatcherId, amount) {
     twitchWatcherId,
     amount
   };
-  const res = await fetch("http://localhost:3000/cash-in", {
+  console.log(body);
+  const res = await fetch(`${SERVER_URL}/cash-in`, {
     method: "post",
     body: JSON.stringify(body),
     headers: { "Content-Type": "application/json" }
@@ -57,11 +63,9 @@ async function cashIn(twitchWatcherId, amount) {
 }
 
 async function getToken(id) {
-  const res = await fetch(
-    `http://localhost:3000/twitch-watcher?twitchWatcherId=${id}`
-  );
+  const res = await fetch(`${SERVER_URL}/twitch-watcher?twitchWatcherId=${id}`);
   const json = await res.json();
-  console.log('getToken: ', json);
+  console.log("getToken: ", json);
   return json.token;
 }
 
