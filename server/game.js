@@ -12,7 +12,7 @@ function calculateTotal(streamerId) {
   });
   return {
     total,
-    optionAmount,
+    optionAmount
   };
 }
 
@@ -22,7 +22,7 @@ function getTwitchWater(id) {
 }
 
 function cashIn(twitchWatcherId, amount) {
-  console.log('log: ', twitchWatcherId, amount);
+  console.log("log: ", twitchWatcherId, amount);
   if (!twitchWatchers[twitchWatcherId]) {
     twitchWatchers[twitchWatcherId] = { token: 0 };
   }
@@ -59,7 +59,7 @@ function createGame({
   title,
   description,
   countdown,
-  options = [],
+  options = []
 }) {
   const game = {
     id: gameCount,
@@ -70,13 +70,13 @@ function createGame({
     options: options.map(option => ({
       option,
       total: 0,
-      people: {},
+      people: {}
     })),
     createdAt: new Date(),
     bets: [],
     winner: null,
     betStop: false,
-    isEnd: false,
+    isEnd: false
   };
   gameCount++;
   allGames[streamerId] = game;
@@ -93,24 +93,34 @@ function bet({ streamerId, twitchWatcherId, amount, optionNumber }) {
   const game = allGames[streamerId];
   const twitchWatcher = twitchWatchers[twitchWatcherId];
 
+
+  if (!game) {
+    return {
+      error: true,
+      message: "no game"
+    };
+  }
+  
   if (!twitchWatcher || !twitchWatcher.token || twitchWatcher.token < amount) {
     return {
       error: true,
-      message: 'not enough token',
+      message: "not enough token"
     };
   }
+
+  
 
   if (game.betStop) {
     return {
       error: true,
-      message: 'bet stop',
+      message: "bet stop"
     };
   }
 
   if (!game.options[optionNumber]) {
     return {
       error: true,
-      message: 'no option',
+      message: "no option"
     };
   }
 
@@ -118,7 +128,7 @@ function bet({ streamerId, twitchWatcherId, amount, optionNumber }) {
     streamerId,
     twitchWatcherId,
     amount,
-    optionNumber,
+    optionNumber
   };
 
   game.options[optionNumber].people[twitchWatcherId] = true;
@@ -155,7 +165,7 @@ function getAllData() {
   return {
     gameCount,
     allGames,
-    twitchWatchers,
+    twitchWatchers
   };
 }
 
@@ -170,5 +180,5 @@ module.exports = {
   gameStopBet,
   bet,
   endGame,
-  getAllData,
+  getAllData
 };

@@ -83,6 +83,7 @@ async function parseCashIn(target, context, commandName) {
 async function parseGetToken(target, context, commandName) {
   if (commandName.match(/^!token$/)) {
     // get token
+    console.log('get: ', commandName);
     const token = await getToken(context["user-id"]);
     if (!isNaN(token)) {
       client.say(target, `${context.username} 有 ${token} 元`);
@@ -123,6 +124,14 @@ async function parseBet(target, context, commandName) {
       const result = await bet(12345, context["user-id"], money, option - 1);
       if (result.message === "not enough token") {
         client.say(target, `${context.username} 哭哭沒錢ㄛ`);
+        return;
+      }
+      if (result.message === "no option") {
+        client.say(target, `${context.username} 沒這選項捏`);
+        return;
+      }
+      if (result.message === "no game") {
+        client.say(target, `${context.username} 現在沒賭盤ㄛ`);
         return;
       }
       if (!isNaN(result.optionNumber) && !isNaN(result.amount)) {
