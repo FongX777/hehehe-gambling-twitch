@@ -1,6 +1,6 @@
 let gameCount = 0;
-const allGames = {};
-const twitchWatchers = {};
+let allGames = {};
+let twitchWatchers = {};
 
 function calculateTotal(streamerId) {
   const game = allGames[streamerId];
