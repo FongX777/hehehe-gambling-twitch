@@ -33,7 +33,7 @@ export default class Admin extends Component {
   }
 
   fetchGame() {
-    fetch(`http://localhost:3000/game?streamerId=12345`, {
+    fetch(`http://a46ec5fdc08a011eaa85a0e89fabf67b-235556262.us-west-2.elb.amazonaws.com:3000/game?streamerId=12345`, {
       method: "GET"
     })
       .then(r => r.json())
@@ -56,7 +56,7 @@ export default class Admin extends Component {
   }
 
   createGame() {
-    fetch(`http://127.0.0.1:3000/game/create`, {
+    fetch(`http://a46ec5fdc08a011eaa85a0e89fabf67b-235556262.us-west-2.elb.amazonaws.com:3000/game/create`, {
       method: "POST",
       body: JSON.stringify(this.state),
       headers: new Headers({
@@ -114,7 +114,7 @@ export default class Admin extends Component {
       winner: i
     });
 
-    fetch(`http://127.0.0.1:3000/game/end`, {
+    fetch(`http://a46ec5fdc08a011eaa85a0e89fabf67b-235556262.us-west-2.elb.amazonaws.com:3000/game/end`, {
       method: "POST",
       body: JSON.stringify({
         streamerId: this.state.streamerId,
