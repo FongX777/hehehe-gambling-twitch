@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hehehehackathon-server-service
+  labels:
+    name: hehehehackathon-server-service
+    app: hehehehackathon-app
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3001
+      targetPort: 3000
+      nodePort: 30001
+  selector:
+    name: hehehehackathon-server-pod
+    app: hehehehackathon-app

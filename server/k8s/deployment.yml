@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hehehehackathon-server-deploy
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels: # labels to select/identify the deployment
+        app: hehehehackathon-server-deploy
+    spec: # pod spec
+      containers:
+        - name: hehehehackathon-server
+          image: 965233513114.dkr.ecr.us-west-2.amazonaws.com/hehehehackathon-repository:latest
+          ports:
+            - containerPort: 3000
+  selector:
+    matchLabels:
+      app: hehehehackathon-server-deploy
